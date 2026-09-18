@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Рабочее время</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#111827">
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<div class="app">
+
+  <header>
+    <div>
+      <div class="eyebrow">ЛИЧНЫЙ ТРЕКЕР</div>
+      <h1>Рабочее время</h1>
+    </div>
+
+    <button id="settingsBtn" class="ghost">
+      ⚙️ Настройки
+    </button>
+
+    <button id="themeToggle" class="theme-toggle" aria-label="Переключить тему">
+      🌙
+    </button>
+  </header>
+
+  <div class="tabs">
+    <button class="tab active" data-screen="today">
+      Сегодня
+    </button>
+
+    <button class="tab" data-screen="stats">
+      Статистика
+    </button>
+
+    <button class="tab" data-screen="history">
+      История
+    </button>
+  </div>
+
+  <div id="todayScreen" class="screen active">
+
+    <div class="card hero">
+
+      <div class="hero-top">
+        <span id="todayText"></span>
+        <span id="statusBadge" class="badge">
+          Не работаю
+        </span>
+      </div>
+
+      <div id="timerCaption" class="muted">
+        Сегодня ещё не начинал работу
+      </div>
+
+      <div id="timer" class="timer">
+        00:00:00
+      </div>
+
+      <div class="main-actions">
+
+        <button
+          id="startBtn"
+          type="button"
+          class="primary big"
+        >
+          ▶ Начать работу
+        </button>
+
+        <button
+          id="lunchBtn"
+          type="button"
+          class="lunch big"
+          disabled
+        >
+          ☕ Начать обед
+        </button>
+
+        <button
+          id="finishBtn"
+          type="button"
+          class="danger big"
+          disabled
+        >
+          ■ Завершить день
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="today-grid">
+
+      <div class="card metric">
+        <span>Начало</span>
+        <strong id="startView">—</strong>
+      </div>
+
+      <div class="card metric">
+        <span>Обед</span>
+        <strong id="lunchView">
+          0ч 00м
+        </strong>
+      </div>
+
+      <div class="card metric">
+        <span>На работе</span>
+        <strong id="grossView">
+          0ч 00м
+        </strong>
+      </div>
+
+      <div class="card metric">
+        <span>Отработано</span>
+        <strong id="netView">
+          0ч 00м
+        </strong>
+      </div>
+
+      <div class="card metric">
+        <span>Норма сегодня</span>
+        <strong id="normView">
+          8ч 00м
+        </strong>
+      </div>
+
+      <div class="card metric">
+        <span>Баланс</span>
+        <strong id="balanceView">
+          −8ч 00м
+        </strong>
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="section-head">
+        <h2>СЕГОДНЯ</h2>
+      </div>
+
+      <div class="interval-list">
+
+        <div id="todayIntervals"></div>
+
+        <div
+          id="todayEmpty"
+          class="empty"
+        >
+          Рабочий день ещё не начат.
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div id="statsScreen" class="screen">
+
+    <div class="card">
+
+      <div class="section-head">
+
+        <h2>АНАЛИТИКА</h2>
+
+        <select id="period">
+          <option value="day">
+            Сегодня
+          </option>
+
+          <option value="week">
+            Эта неделя
+          </option>
+
+          <option value="month" selected>
+            Этот месяц
+          </option>
+
+          <option value="year">
+            Этот год
+          </option>
+        </select>
+
+      </div>
+
+      <div class="summary-grid">
+
+        <div>
+          <span>Рабочих дней</span>
+          <b id="sDays">0</b>
+        </div>
+
+        <div>
+          <span>Отработано</span>
+          <b id="sNet">
+            0ч 00м
+          </b>
+        </div>
+
+        <div>
+          <span>Среднее</span>
+          <b id="sAvg">
+            0ч 00м
+          </b>
+        </div>
+
+        <div>
+          <span>Баланс</span>
+          <b id="sBalance">
+            0ч 00м
+          </b>
+        </div>
+
+      </div>
+
+      <div class="month-balance">
+
+        <span>Норма за период</span>
+
+        <strong id="requiredNorm">
+          0ч 00м
+        </strong>
+
+        <small id="requiredNormHint"></small>
+
+      </div>
+
+      <div class="chart-wrap">
+        <canvas id="chart"></canvas>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div id="historyScreen" class="screen">
+
+    <div class="card">
+
+      <div class="section-head">
+
+        <h2>ИСТОРИЯ</h2>
+
+        <div class="month-controls">
+
+          <button
+            id="prevMonth"
+            class="ghost"
+          >
+            ‹
+          </button>
+
+          <input
+            id="monthPicker"
+            type="month"
+          >
+
+          <button
+            id="nextMonth"
+            class="ghost"
+          >
+            ›
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Дата</th>
+              <th>Начало</th>
+              <th>Конец</th>
+              <th>Обед</th>
+              <th>На работе</th>
+              <th>Отработано</th>
+              <th>Баланс</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody id="rows"></tbody>
+
+        </table>
+
+      </div>
+
+      <div
+        id="empty"
+        class="empty"
+      >
+        Записей за этот месяц нет.
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="section-head">
+        <h2>РУЧНОЙ РЕЖИМ</h2>
+      </div>
+
+      <p class="hint">
+        Добавить или исправить день
+      </p>
+
+      <form
+        id="manualForm"
+        class="form"
+      >
+
+        <label>
+          Дата
+          <input
+            id="mDate"
+            type="date"
+            required
+          >
+        </label>
+
+        <label>
+          Начало
+          <input
+            id="mStart"
+            type="time"
+            required
+          >
+        </label>
+
+        <label>
+          Конец
+          <input
+            id="mEnd"
+            type="time"
+            required
+          >
+        </label>
+
+        <label>
+          Обед, минут
+          <input
+            id="mLunch"
+            type="number"
+            value="60"
+            min="0"
+          >
+        </label>
+
+        <button
+          type="submit"
+          class="primary"
+        >
+          ＋ Сохранить день
+        </button>
+
+      </form>
+
+      <p class="hint">
+        Все данные хранятся локально в браузере.
+      </p>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div
+  id="editModal"
+  class="modal hidden"
+>
+
+  <div class="modal-box">
+
+    <div
+      style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center
+      "
+    >
+
+      <h2>РЕДАКТИРОВАНИЕ</h2>
+
+      <button
+        class="ghost closeEdit"
+      >
+        ✕
+      </button>
+
+    </div>
+
+    <form id="editForm">
+
+      <input
+        type="hidden"
+        id="editId"
+      >
+
+      <label>
+        Дата
+        <input
+          id="editDate"
+          type="date"
+          required
+        >
+      </label>
+
+      <h3 style="margin-top:14px">
+        Интервалы
+      </h3>
+
+      <div
+        id="editIntervals"
+        class="edit-intervals"
+      ></div>
+
+      <label>
+        Обед, минут
+        <input
+          id="editLunch"
+          type="number"
+          min="0"
+          value="0"
+        >
+      </label>
+
+      <button
+        type="button"
+        id="addIntervalBtn"
+        class="secondary"
+      >
+        ＋ Добавить интервал
+      </button>
+
+      <div class="modal-actions">
+
+        <button
+          type="submit"
+          class="primary"
+        >
+          Сохранить изменения
+        </button>
+
+        <button
+          type="button"
+          class="ghost closeEdit"
+        >
+          Отмена
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+<div
+  id="settingsModal"
+  class="modal hidden"
+>
+
+  <div class="modal-box">
+
+    <div
+      style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center
+      "
+    >
+
+      <h2>Настройки</h2>
+
+      <button
+        id="closeSettings"
+        class="ghost"
+      >
+        ✕
+      </button>
+
+    </div>
+
+    <div class="settings-grid">
+
+      <label>
+        Норма рабочего дня, часов
+
+        <input
+          id="normInput"
+          type="number"
+          step="0.5"
+          min="0"
+          max="24"
+          value="8"
+        >
+
+      </label>
+
+      <label>
+        Рабочие дни
+
+        <select
+          id="workDays"
+          multiple
+        >
+
+          <option value="1">
+            Понедельник
+          </option>
+
+          <option value="2">
+            Вторник
+          </option>
+
+          <option value="3">
+            Среда
+          </option>
+
+          <option value="4">
+            Четверг
+          </option>
+
+          <option value="5">
+            Пятница
+          </option>
+
+          <option value="6">
+            Суббота
+          </option>
+
+          <option value="0">
+            Воскресенье
+          </option>
+
+        </select>
+
+      </label>
+
+    </div>
+
+    <p
+      class="hint"
+      style="margin-top:10px"
+    >
+      Норма — это дневная продолжительность рабочего дня. Итоговая норма за период = количество рабочих дней × норма в день.
+    </p>
+
+    <div class="modal-actions">
+
+      <button
+        id="saveSettings"
+        class="primary"
+      >
+        Сохранить
+      </button>
+
+      <button
+        id="exportBtn"
+        class="secondary"
+      >
+        Экспорт CSV
+      </button>
+
+      <button
+        id="clearBtn"
+        class="danger"
+      >
+        Удалить все данные
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<footer>
+  Рабочее время · Локальный трекер
+</footer>
+
+<script src="app.js?v=6"></script>
+
+</body>
+</html>
