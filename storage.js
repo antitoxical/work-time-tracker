@@ -25,6 +25,18 @@ if (!Number.isFinite(settings.norm) || settings.norm < 0) {
   settings.norm = 480;
 }
 
+let syncTimer = null;
+
+function scheduleSync() {
+  if (syncTimer) clearTimeout(syncTimer);
+  syncTimer = setTimeout(() => {
+    syncTimer = null;
+    if (isConfigured() && getUserId()) {
+      syncUp({ records: data, settings });
+    }
+  }, 1000);
+}
+
 export function getData() {
   return data;
 }
@@ -44,9 +56,7 @@ export function setSettings(newSettings) {
   } catch {
     alert("Не удалось сохранить настройки.");
   }
-  if (isConfigured() && getUserId()) {
-    syncUp({ records: data, settings });
-  }
+  scheduleSync();
 }
 
 export function save() {
@@ -55,9 +65,7 @@ export function save() {
   } catch {
     alert("Не удалось сохранить данные. Возможно, хранилище заполнено.");
   }
-  if (isConfigured() && getUserId()) {
-    syncUp({ records: data, settings });
-  }
+  scheduleSync();
 }
 
 export async function syncFromSupabase() {
