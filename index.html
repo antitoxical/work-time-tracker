@@ -558,37 +558,46 @@
     </p>
 
     <div class="settings-section">
-      <h3>Синхронизация</h3>
+      <h3>Облачная синхронизация</h3>
       <p class="hint">
-        Введите одинаковый код на всех устройствах для синхронизации данных.
+        Подключите Supabase для синхронизации между устройствами.
       </p>
 
-      <div id="syncStatus" class="sync-status disconnected">
-        Синхронизация не активна
-      </div>
-
-      <div id="syncCodeDisplay" style="display:none">
-        <span class="hint">Ваш код:</span>
-        <div class="sync-code-row">
-          <code></code>
-          <button id="syncCopy" class="ghost" type="button" title="Копировать">📋</button>
-        </div>
-      </div>
-
-      <div id="syncCodeInputWrap">
+      <div id="supabaseConfig">
         <label>
-          Код синхронизации
-          <input id="syncCodeInput" type="text" placeholder="например: mila2024" autocomplete="off" spellcheck="false">
+          Supabase URL
+          <input id="sbUrl" type="url" placeholder="https://xxx.supabase.co">
         </label>
+        <label>
+          Supabase Anon Key
+          <input id="sbKey" type="text" placeholder="eyJ...">
+        </label>
+        <button id="sbSaveConfig" class="secondary" type="button">
+          Подключить
+        </button>
       </div>
 
-      <div class="sync-buttons">
-        <button id="syncConnect" class="primary" type="button">Подключить</button>
-        <button id="syncGenerate" class="secondary" type="button">Создать новый код</button>
-        <button id="syncDisconnect" class="ghost" type="button" style="display:none">Отключить</button>
+      <div id="authSection" style="display:none">
+        <div id="authStatus" class="auth-status"></div>
+        <div id="authForm">
+          <label>
+            Email
+            <input id="authEmail" type="email" placeholder="you@email.com">
+          </label>
+          <label>
+            Пароль
+            <input id="authPassword" type="password" placeholder="••••••••">
+          </label>
+          <div class="auth-buttons">
+            <button id="authSignIn" class="primary" type="button">Войти</button>
+            <button id="authSignUp" class="secondary" type="button">Регистрация</button>
+          </div>
+        </div>
+        <div id="authActions" style="display:none">
+          <button id="authSignOut" class="ghost" type="button">Выйти</button>
+        </div>
+        <div id="authMessage" class="hint"></div>
       </div>
-
-      <div id="syncMessage" class="hint"></div>
     </div>
 
     <div class="modal-actions">
