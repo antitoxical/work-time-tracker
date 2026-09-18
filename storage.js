@@ -1,4 +1,4 @@
-import { isConfigured, getUserId, syncDown, syncUp } from "./supabase.js";
+import { isConfigured, getSyncCode, syncDown, syncUp } from "./supabase.js";
 
 const KEY = "workTimeTrackerV3";
 const SETTINGS = "workTimeSettingsV3";
@@ -31,7 +31,7 @@ function scheduleSync() {
   if (syncTimer) clearTimeout(syncTimer);
   syncTimer = setTimeout(() => {
     syncTimer = null;
-    if (isConfigured() && getUserId()) {
+    if (isConfigured() && getSyncCode()) {
       syncUp({ records: data, settings });
     }
   }, 1000);
@@ -69,7 +69,7 @@ export function save() {
 }
 
 export async function syncFromSupabase() {
-  if (!isConfigured() || !getUserId()) return false;
+  if (!isConfigured() || !getSyncCode()) return false;
 
   const payload = await syncDown();
   if (!payload) return false;
