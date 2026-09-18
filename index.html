@@ -557,6 +557,49 @@
       Норма — это дневная продолжительность рабочего дня. Итоговая норма за период = количество рабочих дней × норма в день.
     </p>
 
+    <div class="settings-section">
+      <h3>Облачная синхронизация</h3>
+      <p class="hint">
+        Подключите Supabase для синхронизации между устройствами.
+      </p>
+
+      <div id="supabaseConfig">
+        <label>
+          Supabase URL
+          <input id="sbUrl" type="url" placeholder="https://xxx.supabase.co">
+        </label>
+        <label>
+          Supabase Anon Key
+          <input id="sbKey" type="text" placeholder="eyJ...">
+        </label>
+        <button id="sbSaveConfig" class="secondary" type="button">
+          Подключить
+        </button>
+      </div>
+
+      <div id="authSection" style="display:none">
+        <div id="authStatus" class="auth-status"></div>
+        <div id="authForm">
+          <label>
+            Email
+            <input id="authEmail" type="email" placeholder="you@email.com">
+          </label>
+          <label>
+            Пароль
+            <input id="authPassword" type="password" placeholder="••••••••">
+          </label>
+          <div class="auth-buttons">
+            <button id="authSignIn" class="primary" type="button">Войти</button>
+            <button id="authSignUp" class="secondary" type="button">Регистрация</button>
+          </div>
+        </div>
+        <div id="authActions" style="display:none">
+          <button id="authSignOut" class="ghost" type="button">Выйти</button>
+        </div>
+        <div id="authMessage" class="hint"></div>
+      </div>
+    </div>
+
     <div class="modal-actions">
 
       <button
@@ -590,6 +633,7 @@
   Рабочее время · Локальный трекер
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script type="module" src="app.js?v=7"></script>
 
 </body>

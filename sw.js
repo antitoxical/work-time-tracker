@@ -1,4 +1,4 @@
-const C = "work-time-v11";
+const C = "work-time-v12";
 
 const ASSETS = [
   "./",
@@ -12,6 +12,8 @@ const ASSETS = [
   "./render.js",
   "./handlers.js",
   "./theme.js",
+  "./supabase.js",
+  "./supabase-auth.js",
   "./manifest.json"
 ];
 

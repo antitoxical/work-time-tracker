@@ -1,3 +1,5 @@
+import { isConfigured, getUserId, syncDown, syncUp } from "./supabase.js";
+
 const KEY = "workTimeTrackerV3";
 const SETTINGS = "workTimeSettingsV3";
 
@@ -42,6 +44,9 @@ export function setSettings(newSettings) {
   } catch {
     alert("Не удалось сохранить настройки.");
   }
+  if (isConfigured() && getUserId()) {
+    syncUp({ records: data, settings });
+  }
 }
 
 export function save() {
@@ -50,4 +55,31 @@ export function save() {
   } catch {
     alert("Не удалось сохранить данные. Возможно, хранилище заполнено.");
   }
+  if (isConfigured() && getUserId()) {
+    syncUp({ records: data, settings });
+  }
+}
+
+export async function syncFromSupabase() {
+  if (!isConfigured() || !getUserId()) return false;
+
+  const payload = await syncDown();
+  if (!payload) return false;
+
+  if (Array.isArray(payload.records)) {
+    data = payload.records;
+    localStorage.setItem(KEY, JSON.stringify(data));
+  }
+
+  if (payload.settings && typeof payload.settings === "object") {
+    settings = {
+      norm: Number.isFinite(payload.settings.norm) ? payload.settings.norm : 480,
+      workDays: Array.isArray(payload.settings.workDays) && payload.settings.workDays.length
+        ? payload.settings.workDays
+        : [1, 2, 3, 4, 5]
+    };
+    localStorage.setItem(SETTINGS, JSON.stringify(settings));
+  }
+
+  return true;
 }
