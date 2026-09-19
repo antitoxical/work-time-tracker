@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Рабочее время</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#111827">
+<meta name="theme-color" content="#f2f2f7">
 <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -14,18 +14,20 @@
 <div class="app">
 
   <header>
-    <div>
+    <div class="header-left">
       <div class="eyebrow">ЛИЧНЫЙ ТРЕКЕР</div>
       <h1>Рабочее время</h1>
     </div>
 
-    <button id="settingsBtn" class="ghost">
-      ⚙️ Настройки
-    </button>
+    <div class="header-actions">
+      <button id="settingsBtn" class="ghost">
+        ⚙️ Настройки
+      </button>
 
-    <button id="themeToggle" class="theme-toggle" aria-label="Переключить тему">
-      🌙
-    </button>
+      <button id="themeToggle" class="theme-toggle" aria-label="Переключить тему">
+        🌙
+      </button>
+    </div>
   </header>
 
   <div class="tabs">
@@ -48,13 +50,11 @@
 
       <div class="hero-top">
         <span id="todayText"></span>
-        <span id="statusBadge" class="badge">
-          Не работаю
-        </span>
       </div>
 
-      <div id="timerCaption" class="muted">
-        Сегодня ещё не начинал работу
+      <div class="hero-status">
+        <span id="statusBadge" class="badge">Не работаю</span>
+        <span id="timerCaption" class="muted"></span>
       </div>
 
       <div id="timer" class="timer">

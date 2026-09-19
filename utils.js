@@ -27,13 +27,13 @@ export function combineStamp(date, hm) {
 
 export function fmt(x) {
   x = Math.max(0, Math.round(x));
-  return `${Math.floor(x / 60)}ч ${pad(x % 60)}м`;
+  return `${Math.floor(x / 60)}:${pad(x % 60)}`;
 }
 
 export function signed(x) {
-  const s = x < 0 ? "−" : "+";
+  const sign = x < 0 ? "−" : "+";
   x = Math.abs(Math.round(x));
-  return `${s}${Math.floor(x / 60)}ч ${pad(x % 60)}м`;
+  return `${sign}${Math.floor(x / 60)}:${pad(x % 60)}`;
 }
 
 export function fmtTimer(seconds) {

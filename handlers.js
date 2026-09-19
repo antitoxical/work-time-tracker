@@ -2,6 +2,7 @@ import { $, pad, fmt, signed, timeInputValue, combineStamp, displayTime } from "
 import { getData, setData, getSettings, setSettings, save } from "./storage.js";
 import { today, stamp, minBetween, parseTimeToSec, parseStamp } from "./time.js";
 import { normalize } from "./normalize.js";
+import { initCalendar } from "./calendar.js";
 import {
   active,
   doneToday,
@@ -88,27 +89,27 @@ export function setupHandlers() {
   // Period / Month
   $("period").onchange = renderStats;
 
+  const cal = initCalendar($("monthPicker"), (val) => {
+    setMonth(val);
+    renderTable();
+  });
+
   $("prevMonth").onclick = () => {
     const d = new Date(`${getMonth()}-01T12:00:00`);
     d.setMonth(d.getMonth() - 1);
-    setMonth(`${d.getFullYear()}-${pad(d.getMonth() + 1)}`);
-    $("monthPicker").value = getMonth();
+    const val = `${d.getFullYear()}-${pad(d.getMonth() + 1)}`;
+    setMonth(val);
+    cal.setValue(val);
     renderTable();
   };
 
   $("nextMonth").onclick = () => {
     const d = new Date(`${getMonth()}-01T12:00:00`);
     d.setMonth(d.getMonth() + 1);
-    setMonth(`${d.getFullYear()}-${pad(d.getMonth() + 1)}`);
-    $("monthPicker").value = getMonth();
+    const val = `${d.getFullYear()}-${pad(d.getMonth() + 1)}`;
+    setMonth(val);
+    cal.setValue(val);
     renderTable();
-  };
-
-  $("monthPicker").onchange = () => {
-    if ($("monthPicker").value) {
-      setMonth($("monthPicker").value);
-      renderTable();
-    }
   };
 
   // Tabs

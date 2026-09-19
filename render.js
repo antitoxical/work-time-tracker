@@ -51,37 +51,9 @@ function updateLunchView(e) {
   if (e) {
     const total = lunchTotalSeconds(e);
     const m = Math.floor(total / 60);
-    el.textContent = `${pad(Math.floor(m / 60))}ч ${pad(m % 60)}м`;
+    el.textContent = fmt(m);
   } else {
-    el.textContent = "0ч 00м";
-  }
-}
-
-function updateLunchTime(e) {
-  if (!e) return;
-
-  const container = $("todayIntervals");
-  if (!container) return;
-
-  const existing = container.querySelector(".lunch-time");
-  const lunchSec = lunchTotalSeconds(e);
-
-  if (lunchSec <= 0) {
-    if (existing) existing.remove();
-    return;
-  }
-
-  const total = Math.floor(lunchSec / 60);
-  const text =
-    `Время на обеде: ${pad(Math.floor(total / 60))}ч ${pad(total % 60)}м`;
-
-  if (existing) {
-    existing.textContent = text;
-  } else {
-    const div = document.createElement("div");
-    div.className = "lunch-time";
-    div.textContent = text;
-    container.appendChild(div);
+    el.textContent = fmt(0);
   }
 }
 
@@ -104,6 +76,7 @@ export function renderToday() {
     const n = liveNormalized(a);
 
     $("statusBadge").textContent = a.onLunch ? "На обеде" : "Работаю";
+    $("statusBadge").className = `badge ${a.onLunch ? "lunch" : "working"}`;
     $("timerCaption").textContent = a.onLunch ? "Обед идёт" : "Рабочий день идёт";
     $("startBtn").disabled = true;
     $("startBtn").textContent = "▶ Начать работу";
@@ -120,6 +93,7 @@ export function renderToday() {
     const n = normalize(e);
 
     $("statusBadge").textContent = "День завершён";
+    $("statusBadge").className = "badge done";
     $("timerCaption").textContent = "Рабочий день завершён";
     $("startBtn").disabled = false;
     $("startBtn").textContent = "▶ Продолжить работу";
@@ -133,14 +107,15 @@ export function renderToday() {
 
   } else {
     $("statusBadge").textContent = "Не работаю";
+    $("statusBadge").className = "badge";
     $("timerCaption").textContent = "Сегодня ещё не начинал работу";
     $("startBtn").disabled = false;
     $("startBtn").textContent = "▶ Начать работу";
     $("lunchBtn").disabled = true;
     $("finishBtn").disabled = true;
     $("timer").textContent = "00:00:00";
-    $("grossView").textContent = "0ч 00м";
-    $("netView").textContent = "0ч 00м";
+    $("grossView").textContent = fmt(0);
+    $("netView").textContent = fmt(0);
     updateLunchView(null);
     $("balanceView").textContent = signed(-settings.norm);
   }
@@ -219,7 +194,6 @@ function renderIntervals() {
   }
 
   box.innerHTML = items.join("");
-  updateLunchTime(e);
 }
 
 export function renderTable() {
@@ -285,10 +259,15 @@ function drawChart(list) {
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.clearRect(0, 0, w, h);
 
+  const style = getComputedStyle(document.documentElement);
+  const accentSolid = style.getPropertyValue("--accent").trim() || "#007aff";
+  const textColor = style.getPropertyValue("--text-secondary").trim() || "rgba(255,255,255,0.55)";
+  const lineColor = style.getPropertyValue("--text-muted").trim() || "rgba(255,255,255,0.3)";
+
   if (!list.length) {
-    ctx.fillStyle = "var(--text-muted, #9ca3af)";
+    ctx.fillStyle = textColor;
     ctx.textAlign = "center";
-    ctx.font = "14px sans-serif";
+    ctx.font = "14px Inter, sans-serif";
     ctx.fillText("Нет данных для графика", w / 2, h / 2);
     return;
   }
@@ -300,21 +279,22 @@ function drawChart(list) {
   const uw = w - px * 2;
   const step = uw / list.length;
 
-  const style = getComputedStyle(document.documentElement);
-  const barColor = style.getPropertyValue("--accent").trim() || "#111827";
-  const textColor = style.getPropertyValue("--text-secondary").trim() || "#6b7280";
-  const lineColor = style.getPropertyValue("--text-muted").trim() || "#9ca3af";
+  const barGrad = ctx.createLinearGradient(0, base, 0, base - (h - py - 55));
+  barGrad.addColorStop(0, accentSolid);
+  barGrad.addColorStop(1, accentSolid + "88");
 
   list.forEach((e, i) => {
     const bh = e.net / max * (h - py - 55);
     const x = px + i * step + step * 0.2;
     const bw = Math.max(8, step * 0.6);
 
-    ctx.fillStyle = barColor;
-    ctx.fillRect(x, base - bh, bw, bh);
+    ctx.fillStyle = barGrad;
+    ctx.beginPath();
+    ctx.roundRect(x, base - bh, bw, bh, 4);
+    ctx.fill();
 
     ctx.fillStyle = textColor;
-    ctx.font = "10px sans-serif";
+    ctx.font = "10px Inter, sans-serif";
     ctx.textAlign = "center";
     ctx.fillText(e.date.slice(8), x + bw / 2, base + 17);
   });
@@ -322,7 +302,8 @@ function drawChart(list) {
   const ny = base - settings.norm / max * (h - py - 55);
 
   ctx.strokeStyle = lineColor;
-  ctx.setLineDash([5, 5]);
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([6, 4]);
   ctx.beginPath();
   ctx.moveTo(px, ny);
   ctx.lineTo(w - px, ny);
@@ -351,14 +332,12 @@ export function tick() {
     $("grossView").textContent = fmt(n.gross);
     $("netView").textContent = fmt(n.net);
     updateLunchView(a);
-    updateLunchTime(a);
     $("balanceView").textContent = signed(n.net - getSettings().norm);
     return;
   }
 
   if (e) {
     $("timer").textContent = fmtTimer(liveTimerSeconds(e));
-    updateLunchTime(e);
     return;
   }
 
