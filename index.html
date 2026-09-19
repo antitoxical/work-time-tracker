@@ -7,6 +7,8 @@
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#f2f2f7">
 <link rel="stylesheet" href="styles.css">
+<link href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6/index.global.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6/index.global.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -31,8 +33,12 @@
   </header>
 
   <div class="tabs">
-    <button class="tab active" data-screen="today">
-      Сегодня
+    <button class="tab active" data-screen="calendar">
+      Календарь
+    </button>
+
+    <button class="tab" data-screen="today">
+      Трекер
     </button>
 
     <button class="tab" data-screen="stats">
@@ -44,7 +50,30 @@
     </button>
   </div>
 
-  <div id="todayScreen" class="screen active">
+  <div id="calendarScreen" class="screen active">
+
+    <div class="card fc-card">
+      <div id="fullCalendar"></div>
+    </div>
+
+    <div id="calDayDetail" class="card cal-detail hidden">
+      <div class="cal-detail-header">
+        <h2 id="calDetailDate">—</h2>
+        <button id="calDetailClose" class="ghost">✕</button>
+      </div>
+
+      <div id="calDetailContent">
+        <div class="cal-detail-empty">Нет записей за этот день</div>
+      </div>
+
+      <button id="calAddEntry" class="primary" style="margin-top:12px;width:100%">
+        ＋ Добавить запись
+      </button>
+    </div>
+
+  </div>
+
+  <div id="todayScreen" class="screen">
 
     <div class="card hero">
 
@@ -255,10 +284,7 @@
             ‹
           </button>
 
-          <input
-            id="monthPicker"
-            type="month"
-          >
+          <span id="monthLabel" class="month-label"></span>
 
           <button
             id="nextMonth"
@@ -634,7 +660,11 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script type="module" src="app.js?v=7"></script>
+<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6/locales-all.global.min.js"></script>
+<script type="module" src="app.js?v=9"></script>
 
 </body>
 </html>

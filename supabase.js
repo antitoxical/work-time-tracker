@@ -96,7 +96,7 @@ export async function syncDown() {
 
   try {
     const { data, error } = await sb
-      .from("tracker_data")
+      .from("tracker_sync")
       .select("payload")
       .eq("user_id", userId)
       .maybeSingle();
@@ -119,7 +119,7 @@ export async function syncUp(payload) {
 
   try {
     await sb
-      .from("tracker_data")
+      .from("tracker_sync")
       .upsert(
         { user_id: userId, payload, updated_at: new Date().toISOString() },
         { onConflict: "user_id" }

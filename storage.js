@@ -74,9 +74,12 @@ export async function syncFromSupabase() {
   const payload = await syncDown();
   if (!payload) return false;
 
-  if (Array.isArray(payload.records)) {
+  let changed = false;
+
+  if (Array.isArray(payload.records) && payload.records.length > 0) {
     data = payload.records;
     localStorage.setItem(KEY, JSON.stringify(data));
+    changed = true;
   }
 
   if (payload.settings && typeof payload.settings === "object") {
@@ -87,7 +90,8 @@ export async function syncFromSupabase() {
         : [1, 2, 3, 4, 5]
     };
     localStorage.setItem(SETTINGS, JSON.stringify(settings));
+    changed = true;
   }
 
-  return true;
+  return changed;
 }

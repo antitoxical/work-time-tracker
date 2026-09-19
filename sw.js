@@ -1,10 +1,10 @@
-const C = "work-time-v12";
+const C = "work-time-v14";
 
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
-  "./app.js?v=7",
+  "./app.js?v=9",
   "./utils.js",
   "./storage.js",
   "./time.js",
@@ -14,30 +14,25 @@ const ASSETS = [
   "./theme.js",
   "./supabase.js",
   "./supabase-auth.js",
+  "./calendar-view.js",
   "./manifest.json"
 ];
 
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches
-      .open(C)
-      .then(cache => cache.addAll(ASSETS))
-      .then(() => self.skipWaiting())
+    caches.keys().then(keys =>
+      Promise.all(keys.map(key => caches.delete(key)))
+    ).then(() =>
+      caches.open(C).then(cache => cache.addAll(ASSETS))
+    ).then(() => self.skipWaiting())
   );
 });
 
 self.addEventListener("activate", event => {
   event.waitUntil(
-    caches
-      .keys()
-      .then(keys =>
-        Promise.all(
-          keys
-            .filter(key => key !== C)
-            .map(key => caches.delete(key))
-        )
-      )
-      .then(() => self.clients.claim())
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(key => key !== C).map(key => caches.delete(key)))
+    ).then(() => self.clients.claim())
   );
 });
 
@@ -48,16 +43,12 @@ self.addEventListener("fetch", event => {
   if (url.origin !== self.location.origin) return;
 
   event.respondWith(
-    fetch(event.request)
-      .then(response => {
-        if (response.ok) {
-          const copy = response.clone();
-          caches
-            .open(C)
-            .then(cache => cache.put(event.request, copy));
-        }
-        return response;
-      })
-      .catch(() => caches.match(event.request))
+    fetch(event.request).then(response => {
+      if (response.ok) {
+        const copy = response.clone();
+        caches.open(C).then(cache => cache.put(event.request, copy));
+      }
+      return response;
+    }).catch(() => caches.match(event.request))
   );
 });

@@ -12,6 +12,10 @@ import {
   getUserId
 } from "./supabase.js";
 
+function renderCalendarGrid() {
+  if (window._renderCalendarGrid) window._renderCalendarGrid();
+}
+
 function msg(text, isError) {
   const el = $("authMessage");
   el.textContent = text;
@@ -53,6 +57,7 @@ async function handleAuthChange(uid) {
     const changed = await syncFromSupabase();
     if (changed) {
       renderAll();
+      renderCalendarGrid();
       msg("Данные синхронизированы", false);
     } else {
       save();
@@ -90,7 +95,7 @@ export function setupSupabaseAuth() {
     if (uid) {
       msg("Синхронизация данных...");
       const changed = await syncFromSupabase();
-      if (changed) renderAll();
+      if (changed) { renderAll(); renderCalendarGrid(); }
       msg("Подключено и синхронизировано", false);
     } else {
       msg("Подключено. Войдите для синхронизации.", false);
@@ -160,7 +165,7 @@ export function setupSupabaseAuth() {
     initSupabase(handleAuthChange).then(uid => {
       if (uid) {
         syncFromSupabase().then(changed => {
-          if (changed) renderAll();
+          if (changed) { renderAll(); renderCalendarGrid(); }
           updateUI();
         });
       } else {

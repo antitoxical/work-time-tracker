@@ -542,6 +542,14 @@ canvas {
   position: relative;
 }
 
+.month-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  min-width: 120px;
+  text-align: center;
+}
+
 .apple-cal {
   position: absolute;
   top: calc(100% + 6px);
@@ -615,6 +623,291 @@ canvas {
   background: var(--accent);
   color: #fff;
   font-weight: 600;
+}
+
+.fc-card {
+  padding: 12px;
+  overflow: hidden;
+}
+
+.fc {
+  font-family: var(--font);
+}
+
+.fc .fc-toolbar-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.fc .fc-button {
+  background: var(--bg-card-alt);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 13px;
+  border-radius: 6px;
+  padding: 6px 12px;
+  text-transform: none;
+  box-shadow: none;
+}
+
+.fc .fc-button:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.fc .fc-today-button {
+  border-radius: 6px;
+}
+
+.fc .fc-daygrid-day {
+  cursor: pointer;
+}
+
+.fc .fc-daygrid-day:hover {
+  background: var(--accent-light);
+}
+
+.fc .fc-day-today {
+  background: var(--accent-light) !important;
+}
+
+.fc .fc-day-today .fc-daygrid-day-number {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.fc .fc-daygrid-day-number {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  padding: 6px;
+}
+
+.fc .fc-col-header-cell {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 8px 0;
+}
+
+.fc .fc-col-header-cell-cushion {
+  text-decoration: none;
+  color: inherit;
+}
+
+.fc .fc-event {
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.fc .fc-event-ok {
+  background: rgba(52, 199, 89, 0.15) !important;
+  color: #1a7d37 !important;
+  border-left: 3px solid #34c759 !important;
+}
+
+.fc .fc-event-warn {
+  background: rgba(255, 149, 0, 0.15) !important;
+  color: #c77c00 !important;
+  border-left: 3px solid #ff9500 !important;
+}
+
+.fc .fc-event-active {
+  background: rgba(0, 122, 255, 0.15) !important;
+  color: #007aff !important;
+  border-left: 3px solid #007aff !important;
+}
+
+[data-theme="dark"] .fc .fc-event-ok {
+  background: rgba(52, 199, 89, 0.12) !important;
+  color: #34c759 !important;
+}
+
+[data-theme="dark"] .fc .fc-event-warn {
+  background: rgba(255, 149, 0, 0.12) !important;
+  color: #ff9f0a !important;
+}
+
+[data-theme="dark"] .fc .fc-event-active {
+  background: rgba(10, 132, 255, 0.12) !important;
+  color: #0a84ff !important;
+}
+
+.fc .fc-daygrid-day.fc-day-selected {
+  background: rgba(0, 122, 255, 0.08);
+}
+
+.fc .fc-scrollgrid {
+  border-color: var(--border);
+}
+
+.fc td, .fc th {
+  border-color: var(--border);
+}
+
+.fc .fc-more-link {
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.fc .fc-daygrid-event-harness {
+  margin: 1px 2px;
+}
+
+.cal-detail {
+  margin-top: 0;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+}
+
+.cal-detail.hidden {
+  display: none;
+}
+
+.cal-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.cal-detail-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.cal-detail-entry {
+  background: var(--bg-card-alt);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  margin-bottom: 8px;
+  border: 1px solid var(--border);
+}
+
+.cal-detail-status {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.cal-detail-status.ok {
+  background: rgba(52, 199, 89, 0.1);
+  color: var(--success);
+}
+
+.cal-detail-status.partial {
+  background: rgba(255, 149, 0, 0.1);
+  color: var(--amber);
+}
+
+.cal-detail-status.active {
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+.cal-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.cal-detail-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cal-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+}
+
+.cal-detail-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.cal-detail-value {
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.cal-detail-value.ok {
+  color: var(--success);
+}
+
+.cal-detail-value.partial {
+  color: var(--amber);
+}
+
+.cal-detail-value.active {
+  color: var(--accent);
+}
+
+.cal-detail-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.cal-detail-actions .ghost {
+  flex: 1;
+  font-size: 13px;
+  padding: 6px 8px;
+}
+
+.cal-detail-empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 24px 16px;
+  font-size: 14px;
+}
+
+.cal-detail-empty-icon {
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+
+.cal-detail-empty-hint {
+  font-size: 12px;
+  margin-top: 4px;
+  color: var(--text-muted);
 }
 
 .month-controls .ghost {
@@ -1172,5 +1465,43 @@ footer {
   header .ghost {
     font-size: 12px;
     padding: 6px 8px;
+  }
+  .fc-card {
+    padding: 8px;
+    border-radius: 12px;
+  }
+  .fc .fc-toolbar-title {
+    font-size: 15px;
+  }
+  .fc .fc-button {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+  .fc .fc-daygrid-day-number {
+    font-size: 12px;
+    padding: 4px;
+  }
+  .fc .fc-col-header-cell {
+    font-size: 10px;
+    padding: 6px 0;
+  }
+  .fc .fc-event {
+    font-size: 10px;
+    padding: 1px 4px;
+  }
+  .cal-detail-header h2 {
+    font-size: 14px;
+  }
+  .cal-detail-entry {
+    padding: 10px;
+  }
+  .cal-detail-label {
+    font-size: 11px;
+  }
+  .cal-detail-value {
+    font-size: 13px;
+  }
+  .cal-detail-grid {
+    gap: 6px;
   }
 }

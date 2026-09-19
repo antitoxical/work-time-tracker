@@ -312,7 +312,6 @@ function drawChart(list) {
 }
 
 export function renderAll() {
-  $("monthPicker").value = month;
   renderToday();
   renderTable();
 

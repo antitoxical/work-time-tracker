@@ -2,7 +2,6 @@ import { $, pad, fmt, signed, timeInputValue, combineStamp, displayTime } from "
 import { getData, setData, getSettings, setSettings, save } from "./storage.js";
 import { today, stamp, minBetween, parseTimeToSec, parseStamp } from "./time.js";
 import { normalize } from "./normalize.js";
-import { initCalendar } from "./calendar.js";
 import {
   active,
   doneToday,
@@ -13,6 +12,10 @@ import {
   renderStats,
   renderToday
 } from "./render.js";
+
+function renderCalendarGrid() {
+  if (window._renderCalendarGrid) window._renderCalendarGrid();
+}
 
 export function fixStaleActive() {
   const todayStr = today();
@@ -89,28 +92,31 @@ export function setupHandlers() {
   // Period / Month
   $("period").onchange = renderStats;
 
-  const cal = initCalendar($("monthPicker"), (val) => {
-    setMonth(val);
-    renderTable();
-  });
+  const MONTHS_RU = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+
+  function updateMonthLabel() {
+    const m = getMonth();
+    const [y, mo] = m.split("-");
+    $("monthLabel").textContent = `${MONTHS_RU[Number(mo) - 1]} ${y}`;
+  }
 
   $("prevMonth").onclick = () => {
     const d = new Date(`${getMonth()}-01T12:00:00`);
     d.setMonth(d.getMonth() - 1);
-    const val = `${d.getFullYear()}-${pad(d.getMonth() + 1)}`;
-    setMonth(val);
-    cal.setValue(val);
+    setMonth(`${d.getFullYear()}-${pad(d.getMonth() + 1)}`);
+    updateMonthLabel();
     renderTable();
   };
 
   $("nextMonth").onclick = () => {
     const d = new Date(`${getMonth()}-01T12:00:00`);
     d.setMonth(d.getMonth() + 1);
-    const val = `${d.getFullYear()}-${pad(d.getMonth() + 1)}`;
-    setMonth(val);
-    cal.setValue(val);
+    setMonth(`${d.getFullYear()}-${pad(d.getMonth() + 1)}`);
+    updateMonthLabel();
     renderTable();
   };
+
+  updateMonthLabel();
 
   // Tabs
   document.querySelectorAll(".tab").forEach(b => {
@@ -121,6 +127,7 @@ export function setupHandlers() {
       b.classList.add("active");
       $(`${b.dataset.screen}Screen`).classList.add("active");
 
+      if (b.dataset.screen === "calendar") renderCalendarGrid();
       if (b.dataset.screen === "stats") renderStats();
       if (b.dataset.screen === "history") renderTable();
     };
@@ -155,11 +162,11 @@ function renderEditIntervals(ints) {
       `<div class="edit-row">
         <label>
           Начало
-          <input type="time" class="edit-start" value="${timeInputValue(i.start)}" required>
+          <input type="time" class="edit-start" value="${timeInputValue(i.start)}">
         </label>
         <label>
           Конец
-          <input type="time" class="edit-end" value="${timeInputValue(i.end)}" required>
+          <input type="time" class="edit-end" value="${timeInputValue(i.end)}">
         </label>
         <button type="button" class="ghost remove-interval">✕</button>
       </div>`
@@ -185,8 +192,9 @@ function handleEditSubmit(ev) {
   ev.preventDefault();
 
   const id = $("editId").value;
-  const obj = getData().find(x => String(x.id) === String(id));
-  if (!obj) return;
+  const isEdit = !!id;
+  const obj = isEdit ? getData().find(x => String(x.id) === String(id)) : null;
+  if (isEdit && !obj) return;
 
   const date = $("editDate").value;
   if (!date) { alert("Укажите дату."); return; }
@@ -211,15 +219,41 @@ function handleEditSubmit(ev) {
       return;
     }
 
+    const startSec = parseTimeToSec(start);
+    const endSec = parseTimeToSec(end);
+
+    if (endSec <= startSec) {
+      alert(`Конец должен быть позже начала (${startRaw} → ${endRaw}).`);
+      return;
+    }
+
+    if (endSec - startSec < 1) {
+      alert("Интервал слишком короткий (минимум1 минута).");
+      return;
+    }
+
     ints.push({ start, end });
   }
 
   if (!ints.length) { alert("Добавьте хотя бы один интервал."); return; }
 
+  // Check overlapping intervals
+  const sorted = [...ints].sort((a, b) => parseTimeToSec(a.start) - parseTimeToSec(b.start));
+  for (let i = 1; i < sorted.length; i++) {
+    const prevEnd = parseTimeToSec(sorted[i - 1].end);
+    const currStart = parseTimeToSec(sorted[i].start);
+    if (currStart < prevEnd) {
+      const prevIdx = ints.indexOf(sorted[i - 1]) + 1;
+      const currIdx = ints.indexOf(sorted[i]) + 1;
+      alert(`Интервалы ${prevIdx} и ${currIdx} пересекаются.`);
+      return;
+    }
+  }
+
   const lunch = Math.max(0, Number($("editLunch").value) || 0);
   const gross = ints.reduce((sum, i) => sum + minBetween(i.start, i.end), 0);
 
-  if (ints.length <= 1 && lunch > gross) {
+  if (lunch > gross) {
     alert("Обед не может быть больше рабочего времени.");
     return;
   }
@@ -233,18 +267,28 @@ function handleEditSubmit(ev) {
     setData(getData().filter(x => String(x.id) !== String(duplicate.id)));
   }
 
-  obj.date = date;
-  obj.intervals = ints;
-  obj.lunch = lunch;
-  obj.start = ints[0].start;
-  obj.end = ints.at(-1).end;
-  obj.active = false;
-  delete obj.onLunch;
-  delete obj.lunchStart;
+  if (isEdit && obj) {
+    obj.date = date;
+    obj.intervals = ints;
+    obj.lunch = lunch;
+    obj.start = ints[0].start;
+    obj.end = ints.at(-1).end;
+    obj.active = false;
+    delete obj.onLunch;
+    delete obj.lunchStart;
+  } else {
+    getData().push({
+      id: Date.now() + Math.random(),
+      date, start: ints[0].start, end: ints.at(-1).end, lunch,
+      intervals: ints,
+      active: false
+    });
+  }
 
   save();
   closeEdit();
   renderAll();
+  renderCalendarGrid();
 }
 
 function handleManualSubmit(ev) {
@@ -262,6 +306,25 @@ function handleManualSubmit(ev) {
 
   const start = combineStamp(date, startRaw);
   const end = combineStamp(date, endRaw);
+
+  const startSec = parseTimeToSec(start);
+  const endSec = parseTimeToSec(end);
+
+  if (!Number.isFinite(startSec) || !Number.isFinite(endSec)) {
+    alert("Некорректное время.");
+    return;
+  }
+
+  if (endSec <= startSec) {
+    alert("Конец должен быть позже начала.");
+    return;
+  }
+
+  if (endSec - startSec < 1) {
+    alert("Интервал слишком короткий (минимум1 минута).");
+    return;
+  }
+
   const gross = minBetween(start, end);
 
   if (lunch > gross) {
@@ -287,6 +350,7 @@ function handleManualSubmit(ev) {
   $("manualForm").reset();
   $("mLunch").value = 60;
   renderAll();
+  renderCalendarGrid();
 }
 
 function handleStart() {
@@ -310,6 +374,7 @@ function handleStart() {
     finished.lunchStart = null;
     save();
     renderAll();
+    renderCalendarGrid();
     return;
   }
 
@@ -325,6 +390,7 @@ function handleStart() {
 
   save();
   renderAll();
+  renderCalendarGrid();
 }
 
 function handleLunch() {
@@ -350,6 +416,7 @@ function handleLunch() {
 
   save();
   renderAll();
+  renderCalendarGrid();
 }
 
 function handleFinish() {
@@ -375,6 +442,7 @@ function handleFinish() {
 
   save();
   renderAll();
+  renderCalendarGrid();
 }
 
 function openSettings() {
@@ -399,6 +467,7 @@ function handleSaveSettings() {
   setSettings({ norm: Math.round(h * 60), workDays: days });
   $("settingsModal").classList.add("hidden");
   renderAll();
+  renderCalendarGrid();
 }
 
 function handleClear() {
@@ -407,6 +476,7 @@ function handleClear() {
     save();
     $("settingsModal").classList.add("hidden");
     renderAll();
+    renderCalendarGrid();
   }
 }
 
