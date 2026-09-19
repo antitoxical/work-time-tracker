@@ -4,7 +4,7 @@ import { initTheme } from "./theme.js";
 import { setupSupabaseAuth } from "./supabase-auth.js";
 import { initCalendarView, renderCalendarGrid } from "./calendar-view.js";
 
-console.log("[app] v9 loaded");
+console.log("[app] v10 loaded");
 
 window._renderCalendarGrid = renderCalendarGrid;
 
