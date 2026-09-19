@@ -98,7 +98,7 @@ export async function syncDown() {
     const { data, error } = await sb
       .from("tracker_sync")
       .select("payload")
-      .eq("user_id", userId)
+      .eq("sync_code", userId)
       .maybeSingle();
 
     if (error) {
@@ -121,8 +121,8 @@ export async function syncUp(payload) {
     await sb
       .from("tracker_sync")
       .upsert(
-        { user_id: userId, payload, updated_at: new Date().toISOString() },
-        { onConflict: "user_id" }
+        { sync_code: userId, payload, updated_at: new Date().toISOString() },
+        { onConflict: "sync_code" }
       );
   } catch (e) {
     console.warn("Supabase syncUp exception:", e);
