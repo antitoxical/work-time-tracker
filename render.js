@@ -69,7 +69,7 @@ export function renderToday() {
       month: "long"
     });
 
-  $("startView").textContent = e ? normalize(e).start : "—";
+  $("startView").textContent = e ? normalize(e).start.slice(0, 5) : "—";
   $("normView").textContent = fmt(settings.norm);
 
   if (a) {
@@ -141,7 +141,7 @@ function renderIntervals() {
 
   for (let n = 0; n < ints.length; n++) {
     const iv = ints[n];
-    const endTime = iv.end ? displayTime(iv.end) : "сейчас";
+    const endTime = iv.end ? displayTime(iv.end).slice(0, 5) : "сейчас";
     const dur = iv.end
       ? fmt(minBetween(iv.start, iv.end, e.date))
       : (e.onLunch ? "—" : "Идёт");
@@ -150,7 +150,7 @@ function renderIntervals() {
       `<div class="interval-item">
         <div>
           <b>Работа</b>
-          <small>${displayTime(iv.start)} — ${endTime}</small>
+          <small>${displayTime(iv.start).slice(0, 5)} — ${endTime}</small>
         </div>
         <b>${dur}</b>
       </div>`
@@ -172,7 +172,7 @@ function renderIntervals() {
           `<div class="interval-item">
             <div>
               <b>Обед</b>
-              <small>${displayTime(gapStart)} — ${displayTime(gapEnd)}</small>
+              <small>${displayTime(gapStart).slice(0, 5)} — ${displayTime(gapEnd).slice(0, 5)}</small>
             </div>
             <b>${fmt(minBetween(gapStart, gapEnd, e.date))}</b>
           </div>`
@@ -186,7 +186,7 @@ function renderIntervals() {
       `<div class="interval-item">
         <div>
           <b>Обед</b>
-          <small>${displayTime(e.lunchStart)} — сейчас</small>
+          <small>${displayTime(e.lunchStart).slice(0, 5)} — сейчас</small>
         </div>
         <b>Идёт</b>
       </div>`

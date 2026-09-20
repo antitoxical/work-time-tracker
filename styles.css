@@ -1289,8 +1289,10 @@ footer {
 
 @media (max-width: 550px) {
   .app {
-    padding: 10px 10px 100px;
+    padding: 8px 8px 100px;
     overflow-x: hidden;
+    box-sizing: border-box;
+    max-width: 100%;
   }
   h1 {
     font-size: 22px;
@@ -1334,40 +1336,55 @@ footer {
 
   /* Cards */
   .card {
-    padding: 12px;
+    padding: 10px;
     border-radius: 12px;
     margin-bottom: 8px;
     overflow: hidden;
+    box-sizing: border-box;
+    max-width: 100%;
   }
 
   /* Hero / Tracker */
   .hero {
-    padding: 14px 12px 12px;
+    padding: 12px 10px 10px;
     border-radius: 12px;
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow: hidden;
   }
   .hero-top {
     font-size: 12px;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    line-height: 1.3;
+    margin-bottom: 4px;
   }
   .hero-status {
-    flex-wrap: wrap;
+    display: flex;
+    align-items: center;
     justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+    max-width: 100%;
   }
   .hero-status .muted {
     font-size: 11px;
     white-space: normal;
     text-align: center;
     max-width: 100%;
+    line-height: 1.2;
   }
   .badge {
     font-size: 10px;
     padding: 2px 6px;
     white-space: nowrap;
+    flex-shrink: 0;
   }
   .timer {
     font-size: 36px;
-    margin: 6px 0 2px;
+    margin: 4px 0;
+    word-break: break-all;
   }
   .big {
     width: 100%;
@@ -1390,21 +1407,29 @@ footer {
     gap: 1px;
     margin-bottom: 8px;
     overflow: hidden;
+    box-sizing: border-box;
+    max-width: 100%;
   }
   .metric {
     padding: 8px 6px;
     min-width: 0;
+    box-sizing: border-box;
+    overflow: hidden;
   }
   .metric span {
     font-size: 9px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    display: block;
   }
   .metric strong {
     font-size: 14px;
     margin-top: 2px;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
   }
 
   /* Section heads */
@@ -1496,13 +1521,16 @@ footer {
 
   /* FullCalendar */
   .fc-card {
-    padding: 6px;
+    padding: 4px;
     border-radius: 12px;
     overflow: hidden;
+    box-sizing: border-box;
+    max-width: 100%;
   }
   .fc {
     width: 100%;
     overflow: hidden;
+    max-width: 100%;
   }
   .fc .fc-toolbar {
     flex-direction: column;
@@ -1613,11 +1641,11 @@ footer {
   .table-wrap {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    margin: 0 -12px;
-    padding: 0 12px;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   table {
-    min-width: 520px;
+    min-width: 480px;
     width: 100%;
   }
   th {
@@ -1722,22 +1750,27 @@ footer {
 
   /* Interval items */
   .interval-item {
-    padding: 8px 10px;
-    gap: 6px;
-    flex-wrap: wrap;
+    padding: 8px 8px;
+    gap: 4px;
+    flex-wrap: nowrap;
+    align-items: center;
   }
   .interval-item > div {
     min-width: 0;
     flex: 1;
+    overflow: hidden;
   }
   .interval-item b {
     font-size: 12px;
     white-space: nowrap;
+    flex-shrink: 0;
   }
   .interval-item small {
     font-size: 10px;
     display: block;
-    word-break: break-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   /* Auth */
