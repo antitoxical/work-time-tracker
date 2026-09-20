@@ -1289,8 +1289,483 @@ footer {
 
 @media (max-width: 550px) {
   .app {
-    padding: 10px 10px 90px;
+    padding: 10px 10px 100px;
+    overflow-x: hidden;
   }
+  h1 {
+    font-size: 22px;
+  }
+  .eyebrow {
+    font-size: 9px;
+  }
+  header {
+    gap: 4px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  header .ghost {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+
+  /* Tabs */
+  .tabs {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    border-radius: 0;
+    margin: 0;
+    padding: 4px 6px 16px;
+    background: var(--bg-card);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -1px 4px rgba(0,0,0,0.04);
+    gap: 2px;
+  }
+  .tab {
+    padding: 6px 4px;
+    font-size: 10px;
+    border-radius: 6px;
+  }
+  .tab.active {
+    box-shadow: none;
+  }
+
+  /* Cards */
+  .card {
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+
+  /* Hero / Tracker */
+  .hero {
+    padding: 14px 12px 12px;
+    border-radius: 12px;
+  }
+  .hero-top {
+    font-size: 12px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  .hero-status {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .hero-status .muted {
+    font-size: 11px;
+    white-space: normal;
+    text-align: center;
+    max-width: 100%;
+  }
+  .badge {
+    font-size: 10px;
+    padding: 2px 6px;
+    white-space: nowrap;
+  }
+  .timer {
+    font-size: 36px;
+    margin: 6px 0 2px;
+  }
+  .big {
+    width: 100%;
+    min-width: unset;
+  }
+  .main-actions {
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .main-actions button {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  /* Today grid */
+  .today-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+  .metric {
+    padding: 8px 6px;
+    min-width: 0;
+  }
+  .metric span {
+    font-size: 9px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .metric strong {
+    font-size: 14px;
+    margin-top: 2px;
+    white-space: nowrap;
+  }
+
+  /* Section heads */
+  .section-head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+  .section-head h2 {
+    font-size: 12px;
+    width: 100%;
+  }
+  .section-head select,
+  .section-head .month-controls {
+    width: 100%;
+  }
+
+  /* Month controls */
+  .month-controls {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .month-label {
+    font-size: 13px;
+    min-width: 0;
+    flex: 1;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .month-controls .ghost {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    font-size: 16px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Summary grid */
+  .summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    overflow: hidden;
+  }
+  .summary-grid div,
+  .month-balance {
+    padding: 8px 6px;
+    min-width: 0;
+  }
+  .summary-grid span {
+    font-size: 10px;
+  }
+  .summary-grid b,
+  .month-balance strong {
+    font-size: 14px;
+  }
+
+  /* Form */
+  .form {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .form label {
+    font-size: 12px;
+    width: 100%;
+  }
+  .form input,
+  .form select {
+    padding: 10px 10px;
+    font-size: 14px;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+  .form button {
+    grid-column: 1 / -1;
+    height: 42px;
+    font-size: 14px;
+    width: 100%;
+  }
+
+  /* FullCalendar */
+  .fc-card {
+    padding: 6px;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .fc {
+    width: 100%;
+    overflow: hidden;
+  }
+  .fc .fc-toolbar {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .fc .fc-toolbar-chunk {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+  }
+  .fc .fc-toolbar-title {
+    font-size: 15px;
+    text-align: center;
+  }
+  .fc .fc-button {
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+  .fc .fc-scrollgrid {
+    width: 100%;
+    table-layout: fixed;
+  }
+  .fc .fc-scrollgrid,
+  .fc .fc-scrollgrid table {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  .fc td, .fc th {
+    padding: 0;
+    min-width: 0;
+  }
+  .fc .fc-col-header-cell {
+    font-size: 9px;
+    padding: 4px 0;
+  }
+  .fc .fc-col-header-cell-cushion {
+    font-size: 9px;
+  }
+  .fc .fc-daygrid-day {
+    min-height: 44px;
+    padding: 0;
+  }
+  .fc .fc-daygrid-day-number {
+    font-size: 11px;
+    padding: 2px 3px;
+    line-height: 1;
+  }
+  .fc .fc-day-today .fc-daygrid-day-number {
+    width: 20px;
+    height: 20px;
+    font-size: 11px;
+  }
+  .fc .fc-event {
+    font-size: 9px;
+    padding: 1px 3px;
+    border-radius: 3px;
+    border-left-width: 2px !important;
+  }
+  .fc .fc-daygrid-event-harness {
+    margin: 0 1px;
+  }
+  .fc .fc-more-link {
+    font-size: 9px;
+  }
+  .fc .fc-daygrid-day-events {
+    margin: 0;
+  }
+
+  /* Calendar detail */
+  .cal-detail {
+    padding: 12px;
+  }
+  .cal-detail-header h2 {
+    font-size: 14px;
+    word-wrap: break-word;
+  }
+  .cal-detail-entry {
+    padding: 10px;
+  }
+  .cal-detail-label {
+    font-size: 11px;
+  }
+  .cal-detail-value {
+    font-size: 13px;
+  }
+  .cal-detail-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .cal-detail-actions {
+    flex-direction: column;
+    gap: 4px;
+  }
+  .cal-detail-actions .ghost {
+    width: 100%;
+    text-align: center;
+  }
+  .cal-detail-empty {
+    padding: 16px 10px;
+    font-size: 13px;
+  }
+  .cal-detail-empty-icon {
+    font-size: 24px;
+  }
+
+  /* Table */
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -12px;
+    padding: 0 12px;
+  }
+  table {
+    min-width: 520px;
+    width: 100%;
+  }
+  th {
+    font-size: 9px;
+    padding: 6px 5px;
+    letter-spacing: 0.02em;
+  }
+  td {
+    font-size: 11px;
+    padding: 8px 5px;
+  }
+  td:last-child {
+    padding-right: 4px;
+  }
+  td:last-child button {
+    width: 26px;
+    height: 26px;
+    font-size: 11px;
+    padding: 0;
+  }
+  td:last-child button + button {
+    margin-left: 1px;
+  }
+  .net {
+    font-size: 12px;
+  }
+
+  /* Edit modal */
+  .edit-row,
+  .edit-interval {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 8px;
+  }
+  .edit-row button,
+  .edit-interval button {
+    grid-column: 1 / -1;
+  }
+  .edit-row label,
+  .edit-interval label {
+    width: 100%;
+  }
+  .edit-row input,
+  .edit-interval input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .modal-box {
+    padding: 14px;
+    border-radius: 14px;
+    max-height: 85vh;
+    margin-bottom: 60px;
+  }
+  .modal {
+    padding: 8px;
+    align-items: center;
+  }
+  .modal-actions {
+    flex-direction: column;
+    gap: 6px;
+    padding-bottom: 8px;
+  }
+  .modal-actions button {
+    width: 100%;
+    height: 42px;
+    font-size: 14px;
+  }
+  .modal-box h2 {
+    font-size: 16px;
+  }
+  .modal-box h3 {
+    font-size: 13px;
+  }
+  .modal-box label {
+    font-size: 12px;
+    gap: 4px;
+    width: 100%;
+  }
+  .modal-box input,
+  .modal-box select {
+    width: 100%;
+    box-sizing: border-box;
+    min-width: 0;
+  }
+
+  /* Settings */
+  .settings-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .settings-grid select {
+    height: 120px;
+  }
+  .settings-section h3 {
+    font-size: 14px;
+  }
+
+  /* Chart */
+  .chart-wrap {
+    height: 160px;
+  }
+
+  /* Interval items */
+  .interval-item {
+    padding: 8px 10px;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .interval-item > div {
+    min-width: 0;
+    flex: 1;
+  }
+  .interval-item b {
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .interval-item small {
+    font-size: 10px;
+    display: block;
+    word-break: break-all;
+  }
+
+  /* Auth */
+  .auth-buttons {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .auth-buttons button {
+    width: 100%;
+  }
+
+  /* Ghost buttons */
+  .ghost {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  /* Empty states */
+  .empty {
+    padding: 20px 10px;
+    font-size: 13px;
+  }
+
+  /* Hint */
+  .hint {
+    font-size: 12px;
+  }
+}
   h1 {
     font-size: 22px;
   }
