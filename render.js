@@ -208,8 +208,8 @@ export function renderTable() {
     list.map(e =>
       `<tr>
         <td>${e.date.split("-").reverse().join(".")}</td>
-        <td>${e.start}</td>
-        <td>${e.end}</td>
+        <td>${e.start.slice(0, 5)}</td>
+        <td>${e.end.slice(0, 5)}</td>
         <td>${fmt(e.lunch)}</td>
         <td>${fmt(e.gross)}</td>
         <td class="net">${fmt(e.net)}</td>

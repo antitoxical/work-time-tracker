@@ -231,23 +231,18 @@ p,
   justify-content: center;
   gap: 8px;
   margin-bottom: 4px;
-  position: relative;
-}
-
-.hero-status .badge {
-  position: relative;
+  flex-wrap: wrap;
 }
 
 .hero-status .muted {
-  position: absolute;
-  right: 0;
   font-size: 12px;
   color: var(--text-secondary);
+  white-space: nowrap;
 }
 
 .hero .muted {
-  color: var(--text-secondary);
-  font-size: 12px;
+  color: var(--text-hero-secondary);
+  font-size: 13px;
 }
 
 .badge {
@@ -283,11 +278,6 @@ p,
   letter-spacing: -0.02em;
   font-feature-settings: "tnum";
   font-family: -apple-system, "SF Pro Display", monospace;
-}
-
-.hero .muted {
-  color: var(--text-hero-secondary);
-  font-size: 13px;
 }
 
 .main-actions {
@@ -937,6 +927,7 @@ table {
   width: 100%;
   border-collapse: collapse;
   min-width: 750px;
+  table-layout: fixed;
 }
 
 th,
@@ -947,6 +938,8 @@ td {
   white-space: nowrap;
   transition: background 0.1s ease;
   vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 th {
@@ -963,6 +956,16 @@ td {
   font-size: 14px;
   line-height: 1.4;
 }
+
+/* Column widths */
+table th:nth-child(1), table td:nth-child(1) { width: 12%; }
+table th:nth-child(2), table td:nth-child(2) { width: 10%; }
+table th:nth-child(3), table td:nth-child(3) { width: 10%; }
+table th:nth-child(4), table td:nth-child(4) { width: 10%; }
+table th:nth-child(5), table td:nth-child(5) { width: 13%; }
+table th:nth-child(6), table td:nth-child(6) { width: 14%; }
+table th:nth-child(7), table td:nth-child(7) { width: 14%; }
+table th:nth-child(8), table td:nth-child(8) { width: 17%; text-align: right; }
 
 tbody tr {
   transition: background 0.1s ease;
@@ -1645,17 +1648,20 @@ footer {
     box-sizing: border-box;
   }
   table {
-    min-width: 480px;
+    min-width: 520px;
     width: 100%;
+    table-layout: fixed;
   }
   th {
     font-size: 9px;
     padding: 6px 5px;
-    letter-spacing: 0.02em;
+    letter-spacing: 0;
   }
   td {
     font-size: 11px;
     padding: 8px 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   td:last-child {
     padding-right: 4px;
