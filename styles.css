@@ -927,7 +927,6 @@ table {
   width: 100%;
   border-collapse: collapse;
   min-width: 750px;
-  table-layout: fixed;
 }
 
 th,
@@ -956,16 +955,6 @@ td {
   font-size: 14px;
   line-height: 1.4;
 }
-
-/* Column widths */
-table th:nth-child(1), table td:nth-child(1) { width: 12%; }
-table th:nth-child(2), table td:nth-child(2) { width: 10%; }
-table th:nth-child(3), table td:nth-child(3) { width: 10%; }
-table th:nth-child(4), table td:nth-child(4) { width: 10%; }
-table th:nth-child(5), table td:nth-child(5) { width: 13%; }
-table th:nth-child(6), table td:nth-child(6) { width: 14%; }
-table th:nth-child(7), table td:nth-child(7) { width: 14%; }
-table th:nth-child(8), table td:nth-child(8) { width: 17%; text-align: right; }
 
 tbody tr {
   transition: background 0.1s ease;
@@ -1296,6 +1285,7 @@ footer {
     overflow-x: hidden;
     box-sizing: border-box;
     max-width: 100%;
+    width: 100%;
   }
   h1 {
     font-size: 22px;
@@ -1344,6 +1334,11 @@ footer {
     margin-bottom: 8px;
     overflow: hidden;
     box-sizing: border-box;
+    max-width: 100%;
+    width: 100%;
+  }
+  .screen {
+    overflow-x: hidden;
     max-width: 100%;
   }
 
@@ -1535,6 +1530,10 @@ footer {
     overflow: hidden;
     max-width: 100%;
   }
+  .fc .fc-scrollgrid-sync-table {
+    max-width: 100% !important;
+    overflow: hidden;
+  }
   .fc .fc-toolbar {
     flex-direction: column;
     gap: 6px;
@@ -1647,6 +1646,18 @@ footer {
     max-width: 100%;
     box-sizing: border-box;
   }
+  table {
+    min-width: 520px;
+    width: 520px;
+  }
+  table th:nth-child(1), table td:nth-child(1) { width: 62px; }
+  table th:nth-child(2), table td:nth-child(2) { width: 52px; }
+  table th:nth-child(3), table td:nth-child(3) { width: 52px; }
+  table th:nth-child(4), table td:nth-child(4) { width: 52px; }
+  table th:nth-child(5), table td:nth-child(5) { width: 68px; }
+  table th:nth-child(6), table td:nth-child(6) { width: 73px; }
+  table th:nth-child(7), table td:nth-child(7) { width: 73px; }
+  table th:nth-child(8), table td:nth-child(8) { width: 88px; text-align: right; }
   table {
     min-width: 520px;
     width: 100%;
