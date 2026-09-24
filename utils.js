@@ -36,6 +36,18 @@ export function signed(x) {
   return `${sign}${Math.floor(x / 60)}:${pad(x % 60)}`;
 }
 
+export function fmtHuman(minutes) {
+  minutes = Math.max(0, Math.round(minutes));
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+
+  if (h === 0 && m === 0) return "0 минут";
+  if (h === 0) return `${m} мин`;
+  if (m === 0) return `${h} ч`;
+
+  return `${h} ч ${m} мин`;
+}
+
 export function fmtTimer(seconds) {
   seconds = Math.max(0, Math.floor(seconds));
   const h = Math.floor(seconds / 3600);

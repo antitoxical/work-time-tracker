@@ -1,4 +1,4 @@
-import { $, pad, fmt, signed } from "./utils.js";
+import { $, pad, fmt, signed, fmtHuman } from "./utils.js";
 import { getData, setData, getSettings, save } from "./storage.js";
 import { today } from "./time.js";
 import { normalize } from "./normalize.js";
@@ -192,16 +192,16 @@ function showDayDetail(dateStr) {
             </div>
             <div class="cal-detail-cell">
               <span class="cal-detail-label">Обед</span>
-              <span class="cal-detail-value">${fmt(n.lunch)}</span>
+              <span class="cal-detail-value">${fmtHuman(n.lunch)}</span>
             </div>
             <div class="cal-detail-cell">
               <span class="cal-detail-label">Отработано</span>
-              <span class="cal-detail-value ${statusClass}">${fmt(n.net)}</span>
+              <span class="cal-detail-value ${statusClass}">${fmtHuman(n.net)}</span>
             </div>
           </div>
           <div class="cal-detail-row">
             <span class="cal-detail-label">Баланс за день</span>
-            <span class="cal-detail-value">${signed(n.balance)}</span>
+            <span class="cal-detail-value">${n.balance >= 0 ? '+' : ''}${fmtHuman(Math.abs(n.balance))}</span>
           </div>
           `}
           <div class="cal-detail-actions">

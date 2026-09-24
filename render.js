@@ -1,4 +1,4 @@
-import { $, pad, fmt, signed, fmtTimer, displayTime } from "./utils.js";
+import { $, pad, fmt, signed, fmtHuman, fmtTimer, displayTime } from "./utils.js";
 import { getData, getSettings } from "./storage.js";
 import { today, minBetween, periodBounds, inBounds } from "./time.js";
 import {
@@ -234,14 +234,33 @@ export function renderStats() {
 
   const net = list.reduce((s, e) => s + e.net, 0);
   const req = requiredMinutes(a, b);
+  const avg = list.length ? net / list.length : 0;
 
   $("sDays").textContent = list.length;
-  $("sNet").textContent = fmt(net);
-  $("sAvg").textContent = fmt(list.length ? net / list.length : 0);
+  $("sNet").textContent = fmtHuman(net);
+  $("sAvg").textContent = fmtHuman(avg);
   $("sBalance").textContent = signed(net - req);
-  $("requiredNorm").textContent = fmt(req);
+  $("requiredNorm").textContent = fmtHuman(req);
   $("requiredNormHint").textContent =
     `Календарная норма: ${settings.workDays.length} рабочих дней в неделю`;
+
+  // Summary text
+  const summaryEl = $("statsSummary");
+  if (summaryEl) {
+    if (list.length === 0) {
+      summaryEl.textContent = "Нет данных за выбранный период";
+    } else {
+      const parts = [];
+      parts.push(`Итого отработано ${fmtHuman(net)}`);
+      parts.push(`в среднем ${fmtHuman(avg)} в день`);
+      if (net >= req) {
+        parts.push(`переработка ${fmtHuman(net - req)}`);
+      } else {
+        parts.push(`недоработка ${fmtHuman(req - net)}`);
+      }
+      summaryEl.textContent = parts.join(" · ");
+    }
+  }
 
   drawChart(list);
 }
