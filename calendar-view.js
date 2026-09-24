@@ -269,13 +269,7 @@ function timeInputValue(t) {
 }
 
 function openAddForDate(dateStr) {
-  $("mDate").value = dateStr;
-  $("mStart").value = "";
-  $("mEnd").value = "";
-  $("mLunch").value = "60";
-
-  document.querySelector('[data-screen="history"]').click();
-  setTimeout(() => $("mStart").focus(), 100);
+  openQuickAdd(dateStr);
 }
 
 function openQuickAdd(dateStr) {
