@@ -30,17 +30,11 @@ export function initCalendarView() {
       },
       dateClick: function (info) {
         selectedDate = info.dateStr;
-        const data = getData();
-        const hasEntry = data.some(e => e.date === info.dateStr);
 
         document.querySelectorAll(".fc-day-selected").forEach(el => el.classList.remove("fc-day-selected"));
         info.dayEl.classList.add("fc-day-selected");
 
-        if (hasEntry) {
-          showDayDetail(info.dateStr);
-        } else {
-          openQuickAdd(info.dateStr);
-        }
+        showDayDetail(info.dateStr);
       },
       eventClick: function (info) {
         selectedDate = info.event.startStr;
