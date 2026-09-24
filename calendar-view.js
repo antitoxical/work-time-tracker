@@ -71,6 +71,12 @@ export function initCalendarView() {
       openAddForDate(selectedDate);
     };
 
+    const markBtn = $("calMarkDay");
+    if (markBtn) markBtn.onclick = () => {
+      if (!selectedDate) return;
+      markDayAsWorked(selectedDate);
+    };
+
   } catch (e) {
     console.warn("FullCalendar init error:", e);
   }
@@ -89,6 +95,15 @@ function getCalendarEvents() {
         color: "#007aff",
         textColor: "#fff",
         classNames: ["fc-event-active"],
+      });
+    } else if (entry.isZeroDay) {
+      events.push({
+        title: "Рабочий",
+        start: entry.date,
+        color: "rgba(142, 142, 147, 0.12)",
+        textColor: "#8e8e93",
+        borderColor: "rgba(142, 142, 147, 0.25)",
+        classNames: ["fc-event-zero"],
       });
     } else {
       const n = normalize(entry);
@@ -145,12 +160,16 @@ function showDayDetail(dateStr) {
 
     panel.classList.remove("hidden");
 
+    // Show/hide mark button
+    const markBtn = $("calMarkDay");
+    if (markBtn) markBtn.style.display = entries.length ? "none" : "";
+
     if (!entries.length) {
       content.innerHTML = `
         <div class="cal-detail-empty">
           <div class="cal-detail-empty-icon">📋</div>
           <div>Нет записей</div>
-          <div class="cal-detail-empty-hint">Нажмите «+» чтобы добавить</div>
+          <div class="cal-detail-empty-hint">Нажмите «+» или «Отметить как рабочий день»</div>
         </div>`;
       return;
     }
@@ -158,12 +177,16 @@ function showDayDetail(dateStr) {
     const parts = [];
     for (const entry of entries) {
       const n = normalize(entry);
-      const statusClass = entry.active ? "active" : (n.net >= settings.norm ? "ok" : "partial");
-      const statusText = entry.active ? "В процессе" : (n.net >= settings.norm ? "Норма выполнена" : "Неполный день");
+      const isZero = entry.isZeroDay;
+      const statusClass = isZero ? "zero" : (entry.active ? "active" : (n.net >= settings.norm ? "ok" : "partial"));
+      const statusText = isZero ? "Рабочий день (0ч)" : (entry.active ? "В процессе" : (n.net >= settings.norm ? "Норма выполнена" : "Неполный день"));
 
       parts.push(`
         <div class="cal-detail-entry">
           <div class="cal-detail-status ${statusClass}">${statusText}</div>
+          ${isZero ? `
+            <div class="cal-detail-zero-hint">День отмечен как рабочий без трекинга времени</div>
+          ` : `
           <div class="cal-detail-grid">
             <div class="cal-detail-cell">
               <span class="cal-detail-label">Начало</span>
@@ -186,6 +209,7 @@ function showDayDetail(dateStr) {
             <span class="cal-detail-label">Баланс за день</span>
             <span class="cal-detail-value">${signed(n.balance)}</span>
           </div>
+          `}
           <div class="cal-detail-actions">
             <button class="ghost cal-edit-btn" data-id="${entry.id}">✎ Изменить</button>
             <button class="ghost cal-del-btn" data-id="${entry.id}">✕ Удалить</button>
@@ -279,4 +303,30 @@ function openQuickAdd(dateStr) {
 
   const startInput = modal.querySelector(".edit-start");
   if (startInput) setTimeout(() => startInput.focus(), 100);
+}
+
+function markDayAsWorked(dateStr) {
+  const data = getData();
+  const existing = data.find(e => e.date === dateStr);
+
+  if (existing) {
+    if (!confirm("За этот день уже есть запись. Отметить как рабочий (0 часов)? Это заменит существующую запись.")) return;
+    setData(data.filter(e => e.date !== dateStr));
+  }
+
+  const stamp = dateStr + "T00:00:00";
+  getData().push({
+    id: Date.now() + Math.random(),
+    date: dateStr,
+    start: stamp,
+    end: stamp,
+    lunch: 0,
+    intervals: [{ start: stamp, end: stamp }],
+    active: false,
+    isZeroDay: true
+  });
+
+  save();
+  renderCalendarGrid();
+  showDayDetail(dateStr);
 }
