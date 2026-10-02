@@ -484,15 +484,16 @@ function handleExport() {
   fixStaleActive();
 
   const list = getData()
-    .filter(e => e.date?.startsWith(getMonth()) && !e.active)
-    .map(normalize);
+    .filter(e => !e.active)
+    .map(normalize)
+    .sort((a, b) => a.date.localeCompare(b.date));
 
   const rows = [
-    ["Дата", "Интервалы", "Обед, мин", "На работе, мин", "Отработано, мин", "Баланс, мин"],
+    ["Дата", "Интервалы", "Обед", "На работе", "Отработано", "Баланс"],
     ...list.map(e => [
       e.date,
-      e.intervals.map(i => `${i.start}-${i.end}`).join(", "),
-      e.lunch, e.gross, e.net, e.balance
+      e.intervals.map(i => `${displayTime(i.start)}-${displayTime(i.end)}`).join(", "),
+      fmt(e.lunch), fmt(e.gross), fmt(e.net), signed(e.balance)
     ])
   ];
 
@@ -507,7 +508,7 @@ function handleExport() {
   const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
   const a = document.createElement("a");
   a.href = url;
-  a.download = `work-time-${getMonth()}.csv`;
+  a.download = `work-time-export.csv`;
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
