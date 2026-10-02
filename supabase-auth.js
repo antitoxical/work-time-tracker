@@ -1,6 +1,7 @@
 import { $ } from "./utils.js";
 import { syncFromSupabase, setData, getData, save } from "./storage.js";
 import { renderAll } from "./render.js";
+import { fixStaleActive } from "./handlers.js";
 import {
   isConfigured,
   setConfig,
@@ -56,6 +57,7 @@ async function handleAuthChange(uid) {
     msg("Синхронизация данных...");
     const changed = await syncFromSupabase();
     if (changed) {
+      fixStaleActive();
       renderAll();
       renderCalendarGrid();
       msg("Данные синхронизированы", false);
@@ -95,7 +97,7 @@ export function setupSupabaseAuth() {
     if (uid) {
       msg("Синхронизация данных...");
       const changed = await syncFromSupabase();
-      if (changed) { renderAll(); renderCalendarGrid(); }
+      if (changed) { fixStaleActive(); renderAll(); renderCalendarGrid(); }
       msg("Подключено и синхронизировано", false);
     } else {
       msg("Подключено. Войдите для синхронизации.", false);
@@ -165,7 +167,7 @@ export function setupSupabaseAuth() {
     initSupabase(handleAuthChange).then(uid => {
       if (uid) {
         syncFromSupabase().then(changed => {
-          if (changed) { renderAll(); renderCalendarGrid(); }
+          if (changed) { fixStaleActive(); renderAll(); renderCalendarGrid(); }
           updateUI();
         });
       } else {

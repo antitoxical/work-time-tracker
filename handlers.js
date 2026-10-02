@@ -481,6 +481,8 @@ function handleClear() {
 }
 
 function handleExport() {
+  fixStaleActive();
+
   const list = getData()
     .filter(e => e.date?.startsWith(getMonth()) && !e.active)
     .map(normalize);
